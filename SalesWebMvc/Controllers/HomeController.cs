@@ -8,28 +8,34 @@ using System.Threading.Tasks;
 
 namespace SalesWebMvc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Controller // Heranca
     {
-        public IActionResult Index()
+        // Metodos que retornam um objeto do tipo "IActionResult", que e um resultado de uma acao
+        public IActionResult Index() // Acao "Index"
         {
-            return View();
+            return View(); // Method Builder - Metodo auxiliar que retorna um objeto tipo "IActionResult", no caso uma "View"
         }
 
-        public IActionResult About()
+        public IActionResult About() // Acao "About"
         {
-            ViewData["Message"] = "Your application description page.";
+            // ViewData e um dicionario do C#, sendo um acolecao de chaves "pares-valor"
+            // ViewData["Title"] = "About";
+            // Acessa o objeto "ViewData", e esse objeto, na chave "Message", recebera o valor "Your application..."
+            ViewData["Message"] = "Sales Web MVC App with C#"; // Acrescenta um valor ao ViewData
+            ViewData["Developer"] = "Vinicius Coelho Bemfica"; // Acrescenta um valor ao ViewData
 
-            return View();
+            return 
+                // Method Builder - Metodo auxiliar que retorna um objeto tipo "IActionResult", no caso uma "View"
         }
 
-        public IActionResult Contact()
+        public IActionResult Contact() // Acao "Contact"
         {
             ViewData["Message"] = "Your contact page.";
 
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Privacy() // Acao "Privacy"
         {
             return View();
         }
