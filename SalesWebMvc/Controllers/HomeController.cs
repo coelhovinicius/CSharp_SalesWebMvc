@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SalesWebMvc.Models;
+using SalesWebMvc.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,7 +24,7 @@ namespace SalesWebMvc.Controllers
             ViewData["Message"] = "Sales Web MVC App with C#"; // Acrescenta um valor ao ViewData
             ViewData["Developer"] = "Vinicius Coelho Bemfica"; // Acrescenta um valor ao ViewData
 
-            return 
+            return View(); 
                 // Method Builder - Metodo auxiliar que retorna um objeto tipo "IActionResult", no caso uma "View"
         }
 
