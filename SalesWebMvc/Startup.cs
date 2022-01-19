@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
+using SalesWebMvc.Data;
 
 namespace SalesWebMvc
 {
@@ -39,14 +40,19 @@ namespace SalesWebMvc
             services.AddDbContext<SalesWebMvcContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("SalesWebMvcContext"), builder =>
                     builder.MigrationsAssembly("SalesWebMvc"))); // Delegates
+
+            services.AddScoped<SeedingService>(); // Registra esse Servico no sistema de Injecao de Dependencia da Aplicacao
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request Pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        // Metodo "Configure" aceita que sejam colocados outros parametros
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
         {
+            // Teste para verificar se esta no perfil de Desenvolvimento ou de Producao (quando ja tiver sido publicado)
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                seedingService.Seed(); // Popula a base de dados, caso esteja vazia
             }
             else
             {

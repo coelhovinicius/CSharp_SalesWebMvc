@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace SalesWebMvc.Models
+namespace SalesWebMvc.Models // Apesar de estar na pasta Data, pertence ao namespace Models
 {
     public class SalesWebMvcContext : DbContext
     {
