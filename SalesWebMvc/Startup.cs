@@ -29,7 +29,7 @@ namespace SalesWebMvc
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request or not.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
@@ -37,18 +37,20 @@ namespace SalesWebMvc
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            // Alterar para utilizar o MySQL
             services.AddDbContext<SalesWebMvcContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("SalesWebMvcContext"), builder =>
-                    builder.MigrationsAssembly("SalesWebMvc"))); // Delegates
+                        builder.MigrationsAssembly("SalesWebMvc"))); // Delegates
 
-            services.AddScoped<SeedingService>(); // Registra esse Servico no sistema de Injecao de Dependencia da Aplicacao
+            // Registra esse Servico "SeedingService" no sistema de Injecao de Dependencia da Aplicacao
+            services.AddScoped<SeedingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request Pipeline.
-        // Metodo "Configure" aceita que sejam colocados outros parametros
+        // Metodo "Configure" aceita que sejam colocados outros parametros que foram adicionados com ".AddScoped"
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
         {
-            // Teste para verificar se esta no perfil de Desenvolvimento ou de Producao (quando ja tiver sido publicado)
+            // Teste para verificar se esta no perfil de Desenvolvimento ou de Producao (quando o app ja foi publicado)
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

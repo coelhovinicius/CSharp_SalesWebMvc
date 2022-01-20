@@ -11,9 +11,15 @@ namespace SalesWebMvc.Models
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
         public double BaseSalary { get; set; }
-        public Department Department { get; set; }
-        public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();
+        public Department Department { get; set; } /* Associacao Varios para 1 -  Cada "Seller" pode possuir, apenas,
+                                                    * um "Department", e cada "Department" pode possuir diversos "Seller" */
+        public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>(); /* Associacao 1 para Varios - Cada 
+                                                                                        * "Seller" pode possuir diversos 
+                                                                                        * "SalesRecord", porem, cada 
+                                                                                        * "SalesRecord so pode pertencer 
+                                                                                        * a 1 "Seller" */
 
+        // Construtores
         public Seller()
         {
         }
@@ -28,8 +34,8 @@ namespace SalesWebMvc.Models
             Department = department;
         }
 
-        // Operacao para adicionar uma venda na lista de vendas 
-        public void AddSales(SalesRecord sr)
+        // Metodos Customizados
+        public void AddSales(SalesRecord sr) // Operacao para adicionar uma venda na lista de vendas 
         {
             Sales.Add(sr);
         }
@@ -39,10 +45,11 @@ namespace SalesWebMvc.Models
             Sales.Remove(sr);
         }
 
-        // Filtrar a lista para obter as vendas num periodo e retornar o valor total das vendas
+        // Filtrar a lista para obter as vendas num periodo e retornar o valor total das vendas - Utilizacao do LINQ
         public double TotalSales(DateTime initial, DateTime final)
         {
-            return Sales.Where(sr => sr.Date >= initial && sr.Date <= final).Sum(sr => sr.Amount);
+            // De todas as vendas do vendedor entre as datas "initial" e "final", faz a soma (".Amount")
+            return Sales.Where(sr => sr.Date >= initial && sr.Date <= final).Sum(sr => sr.Amount); // Expressao Lambda
         }
     }
 }

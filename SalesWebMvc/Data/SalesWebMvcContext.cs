@@ -6,15 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SalesWebMvc.Models // Apesar de estar na pasta Data, pertence ao namespace Models
 {
-    public class SalesWebMvcContext : DbContext
+    public class SalesWebMvcContext : DbContext // Heranca - Permite encapsular uma secao com o banco de dados
     {
-        public SalesWebMvcContext (DbContextOptions<SalesWebMvcContext> options)
+        public SalesWebMvcContext(DbContextOptions<SalesWebMvcContext> options)
             : base(options)
         {
         }
 
-        public DbSet<Department> Department { get; set; }
-        public DbSet<Seller> Seller { get; set; }
-        public DbSet<SalesRecord> SalesRedcord { get; set; }
+        // Para que o Entity Framework reconheca o Modelo de Dominio que foi feito, devem-se inserir os DBSets das entidades
+        public DbSet<Department> Department { get; set; } // DBSet da entidade Department
+        public DbSet<Seller> Seller { get; set; } // DBSet da entidade Seller
+        public DbSet<SalesRecord> SalesRedcord { get; set; } // DBSet da entidade SalesRecord
     }
 }

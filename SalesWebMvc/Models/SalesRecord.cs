@@ -9,8 +9,10 @@ namespace SalesWebMvc.Models
         public DateTime Date { get; set; }
         public double Amount { get; set; }
         public SaleStatus Status { get; set; }
-        public Seller Seller { get; set; }
+        public Seller Seller { get; set; } /* Associacao Varios para 1 -  Cada "SalesRecord" pode possuir, apenas, 1
+                                            * "Seller", porem, cada "Seller" pode possuir diversos "SalesRecord" */
 
+        // Constutores 
         public SalesRecord()
         {
         }

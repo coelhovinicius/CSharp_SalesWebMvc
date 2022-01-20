@@ -8,8 +8,12 @@ namespace SalesWebMvc.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Seller> Sellers { get; set; } = new List<Seller>(); // Associacao do Department 1 => *Seller
+        public ICollection<Seller> Sellers { get; set; } = new List<Seller>(); /* Associacao 1 para Varios - Cada
+                                                                                * "Department" pode possuir diversos
+                                                                                * "Sellers" e cada "Seller" pode, apenas, 
+                                                                                * possuir 1 "Department" */
 
+        // Construtores
         public Department()
         {
         }
@@ -20,6 +24,7 @@ namespace SalesWebMvc.Models
             Name = name;
         }
 
+        // Metodos Customizados
         public void AddSeller(Seller seller)
         {
             Sellers.Add(seller);
@@ -30,9 +35,9 @@ namespace SalesWebMvc.Models
             Sellers.Remove(seller);
         }*/
 
-        public double TotalSales(DateTime initial, DateTime final)
+        public double TotalSales(DateTime initial, DateTime final) // Calcula as vendas entre "initial" e "final"
         {
-            return Sellers.Sum(seller => seller.TotalSales(initial, final));
+            return Sellers.Sum(seller => seller.TotalSales(initial, final)); // Expressao Lambda
         }
     }
 }

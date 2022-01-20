@@ -9,10 +9,11 @@ namespace SalesWebMvc.Data
 {
     public class SeedingService // Servico para popular a base de dados
     {
-        private SalesWebMvcContext _context;
+        private SalesWebMvcContext _context; /* Declara o registro da dependencia do "SeedingService" com o DBContext
+                                              * ("SalesWebMvcContext.cs") */
 
         /* Construtor para indicar que deve acontecer a Injecao de Dependencia - Quando um SeedingService for criado,
-         * ele ira receber uma instancia do Context automaticamente */
+         * ele ira receber uma instancia do "context" automaticamente */
         public SeedingService(SalesWebMvcContext context)
         {
             _context = context;
@@ -27,10 +28,10 @@ namespace SalesWebMvc.Data
                 _context.Seller.Any() ||
                 _context.SalesRedcord.Any())
             {
-                return; // Corta a execucao do Metodo
+                return; // Corta a execucao do Metodo, pois o banco de dados ja esta povoado
             }
-            // Workflow Code-First - Primeiro, criam-se os Objetos e, depois, a Base de Dados
 
+            // Workflow Code-First - Primeiro, criam-se os Objetos e, depois, a Base de Dados
             // Departamentos
             Department d1 = new Department(1, "Computers");
             Department d2 = new Department(2, "Electronics");
@@ -80,7 +81,7 @@ namespace SalesWebMvc.Data
 
             /* Adicionar os objetos no banco de dados usando o Entity Framework. "AddRange permite que varios
              * objetos possam ser adicionados de uma so vez */
-            
+
             _context.Department.AddRange(d1, d2, d3, d4);
 
             _context.Seller.AddRange(s1, s2, s3, s5, s6);
