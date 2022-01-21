@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
+using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,14 @@ namespace SalesWebMvc.Controllers
     public class SellersController : Controller
     {
         // Dependencias
-        private readonly SellerService _sellerService;
+        private readonly SellerService _sellerService; // Dependencia para SellerService
+        private readonly DepartmentService _departmentService; // Dependencia para DepartmentService
 
         // Construtores
-        public SellersController(SellerService sellerService) // Injecao de Dependencia
+        public SellersController(SellerService sellerService, DepartmentService departmentService) // Injecao de Dependencia
         {
             _sellerService = sellerService;
+            _departmentService = departmentService;
         }
 
         // Metodos - Operacoes - Acoes
@@ -28,7 +31,9 @@ namespace SalesWebMvc.Controllers
 
         public IActionResult Create() // Acao correspondente ao metodo GET do HTTP - Nao permite a edicao de dados
         {
-            return View(); // Retorna a View de nome "Create"
+            var departments = _departmentService.FindAll(); // Busca todos os dados no servico "_departmentService"
+            var viewModel = new SellerFormViewModel { Departments = departments };
+            return View(viewModel); // Retorna a View de nome "Create"
         }
 
         [HttpPost] // Anotacao que indica que e um metodo POST
