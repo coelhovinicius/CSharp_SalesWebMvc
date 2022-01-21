@@ -26,14 +26,14 @@ namespace SalesWebMvc.Controllers
             return View(list); // Gera um "IActionResult" contendo a lista "list" - Encaminha os dados para a View
         }
 
-        public IActionResult Create()
+        public IActionResult Create() // Acao correspondente ao metodo GET do HTTP - Nao permite a edicao de dados
         {
-            return View();
+            return View(); // Retorna a View de nome "Create"
         }
 
-        [HttpPost] // Anotacao que indica que e um metodo Post
-        [ValidateAntiForgeryToken] // Evita ataques CSRF (protege a sessao de autenticacao)
-        public IActionResult Create(Seller seller)
+        [HttpPost] // Anotacao que indica que e um metodo POST
+        [ValidateAntiForgeryToken] // Evita ataques CSRF (Cross-Site Requesting Forgery - protege a sessao de autenticacao)
+        public IActionResult Create(Seller seller) // Metodo POST do HTTP - Permite a edicao de dados
         {
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index)); // Retorna para o Index

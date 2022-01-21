@@ -13,6 +13,7 @@ namespace SalesWebMvc.Models
         public double BaseSalary { get; set; }
         public Department Department { get; set; } /* Associacao Varios para 1 -  Cada "Seller" pode possuir, apenas,
                                                     * um "Department", e cada "Department" pode possuir diversos "Seller" */
+        public int DepartmentId { get; set; } // Garante a Integridade Referencial (deve ser not null)
         public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>(); /* Associacao 1 para Varios - Cada 
                                                                                         * "Seller" pode possuir diversos 
                                                                                         * "SalesRecord", porem, cada 
