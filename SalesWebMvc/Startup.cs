@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Globalization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
 using SalesWebMvc.Data;
@@ -53,6 +55,26 @@ namespace SalesWebMvc
         // Metodo "Configure" aceita que sejam colocados outros parametros que foram adicionados com ".AddScoped"
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
         {
+            // Configuracao para mudar a localizacao padrao para os EUA (enUS)
+            var enUS = new CultureInfo("en-US"); // Variavel que recebe a localizacao
+            var localizationOptions = new RequestLocalizationOptions // Variavel para receber as configuracoes 
+            {
+                DefaultRequestCulture = new RequestCulture(enUS), // Indica a configuracao padrao da localizacao do app
+                SupportedCultures = new List<CultureInfo> { enUS }, // Locails possiveis do app
+                SupportedUICultures = new List<CultureInfo> { enUS }
+            };
+
+            /*// Configuracao para mudar a localizacao padrao para os EUA (enUS)
+            var ptBR = new CultureInfo("pt-BR"); // Variavel que recebe a localizacao
+            var localizationOptions = new RequestLocalizationOptions // Variavel para receber as configuracoes 
+            {
+                DefaultRequestCulture = new RequestCulture(ptBR), // Indica a configuracao padrao da localizacao do app
+                SupportedCultures = new List<CultureInfo> { ptBR }, // Locails possiveis do app
+                SupportedUICultures = new List<CultureInfo> { ptBR }
+            };*/
+
+            app.UseRequestLocalization(localizationOptions); // Efetiva a alteracao das configuracoes localizacao
+
             // Teste para verificar se esta no perfil de Desenvolvimento ou de Producao (quando o app ja foi publicado)
             if (env.IsDevelopment())
             {
