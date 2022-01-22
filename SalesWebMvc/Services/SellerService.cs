@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SalesWebMvc.Services.Exceptions;
 
 namespace SalesWebMvc.Services
 {
@@ -45,6 +46,26 @@ namespace SalesWebMvc.Services
             var obj = _context.Seller.Find(id); // Chama o objeto
             _context.Seller.Remove(obj); // Remove o objeto
             _context.SaveChanges(); // Salva as alteracoes - Efetivar a alteracao
+        }
+
+        public void Update(Seller obj)
+        {
+            // Testa se existe no BD algum vendedor "x" cujo "Id" seja igual ao "Id" de "obj" 
+            if(!_context.Seller.Any(x => x.Id == obj.Id)) // Caso nao exista
+            {
+                throw new NotFoundException("Id not found");
+            }
+            try
+            {
+                _context.Update(obj);
+                _context.SaveChanges();
+            }
+            /* Interceptar uma excessao do nivel de acesso a dados e relancar essa excecao, utilizando uma excecao em
+             * nivel de Servico */
+            catch (DbUpdateConcurrencyException e) // Intercepta a excecao de acesso a dados
+            {
+                throw new DbConcurrencyException(e.Message); // Lanca a excecao da camada de Servico
+            }
         }
     }
 }
