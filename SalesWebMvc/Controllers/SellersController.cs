@@ -31,6 +31,7 @@ namespace SalesWebMvc.Controllers
             return View(list); // Gera um "IActionResult" contendo a lista "list" - Encaminha os dados para a View
         }
 
+        // GET
         public IActionResult Create() // Acao correspondente ao metodo GET do HTTP - Nao permite a edicao de dados
         {
             var departments = _departmentService.FindAll(); // Busca todos os dados no servico "_departmentService"
@@ -42,6 +43,13 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken] // Evita ataques CSRF (Cross-Site Requesting Forgery - protege a sessao de autenticacao)
         public IActionResult Create(Seller seller) // Metodo POST do HTTP - Permite a edicao de dados
         {
+            // Validacao de Dados (caso o JavaScript esteja desabilitado)
+            if (!ModelState.IsValid) // Se nao for validado
+            {
+                var departments = _departmentService.FindAll(); // Carrega os departamentos
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel); // Repassa a mesma View ate o preenchimento correto do Formulario
+            }
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index)); // Retorna para o Index
         }
@@ -112,6 +120,13 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
+            // Validacao de Dados (caso o JavaScript esteja desabilitado)
+            if (!ModelState.IsValid) // Se nao for validado
+            {
+                var departments = _departmentService.FindAll(); // Carrega os departamentos
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel); // Repassa a mesma View ate o preenchimento correto do Formulario
+            }
             if (id != seller.Id)
             {
                 //return BadRequest();
