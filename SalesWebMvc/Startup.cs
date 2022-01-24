@@ -49,6 +49,7 @@ namespace SalesWebMvc
             services.AddScoped<SeedingService>(); // Servico "SeedingService"
             services.AddScoped<SellerService>(); // Servico "SellerService"
             services.AddScoped<DepartmentService>(); // Servico "DepartmentService"
+            services.AddScoped<SalesRecordService>(); // Servico "SalesRecordService"
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request Pipeline.

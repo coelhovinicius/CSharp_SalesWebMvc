@@ -16,6 +16,6 @@ namespace SalesWebMvc.Models // Apesar de estar na pasta Data, pertence ao names
         // Para que o Entity Framework reconheca o Modelo de Dominio que foi feito, devem-se inserir os DBSets das entidades
         public DbSet<Department> Department { get; set; } // DBSet da entidade Department
         public DbSet<Seller> Seller { get; set; } // DBSet da entidade Seller
-        public DbSet<SalesRecord> SalesRedcord { get; set; } // DBSet da entidade SalesRecord
+        public DbSet<SalesRecord> SalesRecord { get; set; } // DBSet da entidade SalesRecord
     }
 }
