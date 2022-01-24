@@ -25,23 +25,52 @@ namespace SalesWebMvc.Controllers
         }
 
         // Metodos - Operacoes - Acoes
-        public IActionResult Index() // Chama o Controlador
+        // Metodo Assincrono
+        public async Task<IActionResult> Index() // Chama o Controlador
         {
-            var list = _sellerService.FindAll(); // Implementacao da chamada "_sellerService.FindAll" - acessa do Model
+            var list = await _sellerService.FindAllAsync(); // Implementacao da chamada "_sellerService.FindAll" - acessa do Model
             return View(list); // Gera um "IActionResult" contendo a lista "list" - Encaminha os dados para a View
         }
 
-        // GET
-        public IActionResult Create() // Acao correspondente ao metodo GET do HTTP - Nao permite a edicao de dados
+        /*public IActionResult Index() // Chama o Controlador
         {
-            var departments = _departmentService.FindAll(); // Busca todos os dados no servico "_departmentService"
+            var list = _sellerService.FindAll(); // Implementacao da chamada "_sellerService.FindAll" - acessa do Model
+            return View(list); // Gera um "IActionResult" contendo a lista "list" - Encaminha os dados para a View
+        }*/
+
+        // GET
+        //Metodo Assincrono
+        public async Task<IActionResult> Create() // Acao correspondente ao metodo GET do HTTP - Nao permite a edicao de dados
+        {
+            var departments = await _departmentService.FindAllAsync(); // Busca todos os dados no servico "_departmentService"
             var viewModel = new SellerFormViewModel { Departments = departments };
             return View(viewModel); // Retorna a View de nome "Create"
         }
 
+        /*public IActionResult Create() // Acao correspondente ao metodo GET do HTTP - Nao permite a edicao de dados
+        {
+            var departments = _departmentService.FindAll(); // Busca todos os dados no servico "_departmentService"
+            var viewModel = new SellerFormViewModel { Departments = departments };
+            return View(viewModel); // Retorna a View de nome "Create"
+        }*/
+
         [HttpPost] // Anotacao que indica que e um metodo POST
         [ValidateAntiForgeryToken] // Evita ataques CSRF (Cross-Site Requesting Forgery - protege a sessao de autenticacao)
-        public IActionResult Create(Seller seller) // Metodo POST do HTTP - Permite a edicao de dados
+        // Metodo Async
+        public async Task<IActionResult> Create(Seller seller) // Metodo POST do HTTP - Permite a edicao de dados
+        {
+            // Validacao de Dados (caso o JavaScript esteja desabilitado)
+            if (!ModelState.IsValid) // Se nao for validado
+            {
+                var departments = await _departmentService.FindAllAsync(); // Carrega os departamentos
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel); // Repassa a mesma View ate o preenchimento correto do Formulario
+            }
+            await _sellerService.InsertAsync(seller);
+            return RedirectToAction(nameof(Index)); // Retorna para o Index
+        }
+
+        /*public IActionResult Create(Seller seller) // Metodo POST do HTTP - Permite a edicao de dados
         {
             // Validacao de Dados (caso o JavaScript esteja desabilitado)
             if (!ModelState.IsValid) // Se nao for validado
@@ -52,9 +81,28 @@ namespace SalesWebMvc.Controllers
             }
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index)); // Retorna para o Index
+        }*/
+
+        // GET
+        //Metodo Async
+        public async Task<IActionResult> Delete(int? id) // "int?" indica que e opcional
+        {
+            if (id == null)
+            {
+                //return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
+            }
+
+            var obj = await _sellerService.FindByIdAsync(id.Value);
+            if (obj == null)
+            {
+                //return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
+            }
+            return View(obj);
         }
 
-        public IActionResult Delete(int? id) // "int?" indica que e opcional
+        /*public IActionResult Delete(int? id) // "int?" indica que e opcional
         {
             if (id == null)
             {
@@ -69,17 +117,44 @@ namespace SalesWebMvc.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
             return View(obj);
-        }
+        }*/
 
+        // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        // Metodo Async
+        public async Task<IActionResult> Delete(int id)
         {
-            _sellerService.Remove(id);
+            await _sellerService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int? id)
+        /*public IActionResult Delete(int id)
+        {
+            _sellerService.Remove(id);
+            return RedirectToAction(nameof(Index));
+        }*/
+
+        // Metodo Async
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                //return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
+            }
+
+            var obj = await _sellerService.FindByIdAsync(id.Value);
+            if (obj == null)
+            {
+                //return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
+            }
+            return View(obj);
+        }
+
+        /*public IActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -94,10 +169,30 @@ namespace SalesWebMvc.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
             return View(obj);
+        }*/
+
+        //Metodo Async
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                //return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
+            }
+
+            var obj = await _sellerService.FindByIdAsync(id.Value);
+            if (obj == null)
+            {
+                //return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
+            }
+
+            List<Department> departments = await _departmentService.FindAllAsync();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
+            return View(viewModel);
         }
 
-        public IActionResult Edit(int? id)
-        {
+        /*{
             if (id == null)
             {
                 //return NotFound();
@@ -114,16 +209,18 @@ namespace SalesWebMvc.Controllers
             List<Department> departments = _departmentService.FindAll();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
             return View(viewModel);
-        }
+        }*/
 
+        // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Seller seller)
+        // Metodo Async
+        public async Task<IActionResult> Edit(int id, Seller seller)
         {
             // Validacao de Dados (caso o JavaScript esteja desabilitado)
             if (!ModelState.IsValid) // Se nao for validado
             {
-                var departments = _departmentService.FindAll(); // Carrega os departamentos
+                var departments = await _departmentService.FindAllAsync(); // Carrega os departamentos
                 var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
                 return View(viewModel); // Repassa a mesma View ate o preenchimento correto do Formulario
             }
@@ -135,7 +232,7 @@ namespace SalesWebMvc.Controllers
 
             try
             {
-                _sellerService.Update(seller);
+                await _sellerService.UpdateAsync(seller);
                 return RedirectToAction(nameof(Index));
             }
             //catch (NotFoundException)
@@ -156,7 +253,7 @@ namespace SalesWebMvc.Controllers
             }*/
         }
 
-        // Acao de erro
+        // Acao de erro - Nao precisa ser assincrona, pois nao ha acesso adados, apenas o retorno da View
         public IActionResult Error(string message)
         {
             var viewModel = new ErrorViewModel
