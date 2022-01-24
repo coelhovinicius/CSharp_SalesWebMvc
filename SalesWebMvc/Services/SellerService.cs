@@ -63,9 +63,17 @@ namespace SalesWebMvc.Services
         // Metodo Assincrono
         public async Task RemoveAsync(int id)
         {
-            var obj = await _context.Seller.FindAsync(id);
-            _context.Seller.Remove(obj);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var obj = await _context.Seller.FindAsync(id);
+                _context.Seller.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new IntegrityException("Cannot delete this seller because there are sales on his/her name");
+                //throw new IntegrityException(e.Message);
+            }
         }
 
         /*public void Remove(int id)
