@@ -22,7 +22,7 @@ namespace SalesWebMvc.Controllers
             // ViewData["Title"] = "About";
             // Acessa o objeto "ViewData", e esse objeto, na chave "Message", recebera o valor "Your application..."
             ViewData["Message"] = "Sales Web MVC App with C#"; // Acrescenta um valor ao ViewData
-            ViewData["Developer"] = "Vinicius Coelho Bemfica"; // Acrescenta um valor ao ViewData
+            ViewData["Developer"] = "Vinícius Coelho Bemfica"; // Acrescenta um valor ao ViewData
 
             return View(); 
                 // Method Builder - Metodo auxiliar que retorna um objeto tipo "IActionResult", no caso uma "View"
@@ -30,7 +30,7 @@ namespace SalesWebMvc.Controllers
 
         public IActionResult Contact() // Acao "Contact"
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Vinícius Coelho Bemfica";
 
             return View();
         }

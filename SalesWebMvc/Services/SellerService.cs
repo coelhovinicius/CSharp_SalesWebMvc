@@ -71,8 +71,8 @@ namespace SalesWebMvc.Services
             }
             catch (DbUpdateException e)
             {
-                throw new IntegrityException("Cannot delete this seller because there are sales on his/her name");
-                //throw new IntegrityException(e.Message);
+                //throw new IntegrityException("Cannot delete this seller because there are sales on his/her name");
+                throw new IntegrityException(e.Message + "\nError: Seller already has sales.");
             }
         }
 

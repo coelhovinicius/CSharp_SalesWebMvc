@@ -18,7 +18,8 @@ namespace SalesWebMvc.Controllers
         private readonly DepartmentService _departmentService; // Dependencia para DepartmentService
 
         // Construtores
-        public SellersController(SellerService sellerService, DepartmentService departmentService) // Injecao de Dependencia
+        // Injecao de Dependencia
+        public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
             _sellerService = sellerService;
             _departmentService = departmentService;
